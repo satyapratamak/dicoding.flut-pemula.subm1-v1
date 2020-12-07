@@ -1,3 +1,5 @@
+import 'package:dicoding_flut_pemula_subm1_v1/widgets/destination_carousel.dart';
+import 'package:dicoding_flut_pemula_subm1_v1/widgets/hotel_carousel.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -7,6 +9,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int _selectedIndex = 0;
+
   List<IconData> _icons = [
     FontAwesomeIcons.plane,
     FontAwesomeIcons.bed,
@@ -15,16 +19,28 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   Widget _buildIcon(int index) {
-    return Container(
-      height: 60.0,
-      width: 60.0,
-      decoration: BoxDecoration(
-          color: Theme.of(context).accentColor,
-          borderRadius: BorderRadius.circular(30.0)),
-      child: Icon(
-        _icons[index],
-        size: 25.0,
-        color: Theme.of(context).primaryColor,
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _selectedIndex = index;
+        });
+        print(_selectedIndex);
+      },
+      child: Container(
+        height: 60.0,
+        width: 60.0,
+        decoration: BoxDecoration(
+            color: _selectedIndex == index
+                ? Theme.of(context).accentColor
+                : Color(0xFFE7EBEE),
+            borderRadius: BorderRadius.circular(30.0)),
+        child: Icon(
+          _icons[index],
+          size: 25.0,
+          color: _selectedIndex == index
+              ? Theme.of(context).primaryColor
+              : Color(0xFFB4C1C4),
+        ),
       ),
     );
   }
@@ -44,7 +60,18 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             SizedBox(height: 20.0),
-            _buildIcon(0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: _icons
+                  .asMap()
+                  .entries
+                  .map((MapEntry map) => _buildIcon(map.key))
+                  .toList(),
+            ),
+            SizedBox(height: 20.0),
+            DestinationCarousel(),
+            SizedBox(height: 20.0),
+            HotelCarousel(),
           ],
         ),
       ),
